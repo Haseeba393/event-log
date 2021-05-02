@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_events"
+        android:icon="@drawable/event_512"
+        android:title="@string/tab_events" />
+
+    <item
+        android:id="@+id/navigation_addevent"
+        android:icon="@drawable/add_512"
+        android:title="@string/tab_addevent" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/profile_512"
+        android:title="@string/tab_profile" />
+
+</menu>

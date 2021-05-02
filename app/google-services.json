@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "159865986954",
+    "project_id": "event-log-451d8",
+    "storage_bucket": "event-log-451d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:159865986954:android:f747ea3e40bf53eb737273",
+        "android_client_info": {
+          "package_name": "com.example.eventlogging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "159865986954-csmba8ev0n62n8a8qvi0j9ntlvi2atq0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIvQEw22y7TFS68dT3LRrkix7XiAW_Pz0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "159865986954-csmba8ev0n62n8a8qvi0j9ntlvi2atq0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

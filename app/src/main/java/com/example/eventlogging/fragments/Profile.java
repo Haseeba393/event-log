@@ -1,61 +1,45 @@
 package com.example.eventlogging.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.example.eventlogging.Home;
+import com.example.eventlogging.MainActivity;
 import com.example.eventlogging.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Profile#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.HashMap;
+
 public class Profile extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    // Firebase
+    private FirebaseAuth mAuth;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public Profile() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Profile.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Profile newInstance(String param1, String param2) {
-        Profile fragment = new Profile();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private LinearLayout profileData;
+    private EditText profileFN;
+    private EditText profileLN;
+    private EditText profileEmail;
+    private Button logoutBtn;
+    private ProgressBar profileLoading;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,4 +47,92 @@ public class Profile extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
+        // Getting user data
+        _getUserData();
+
+        // Initializing Variables
+        profileData = getActivity().findViewById(R.id.profileData);
+        profileFN = getActivity().findViewById(R.id.profileFN);
+        profileLN = getActivity().findViewById(R.id.profileLN);
+        profileEmail = getActivity().findViewById(R.id.profileEmail);
+        logoutBtn = getActivity().findViewById(R.id.logoutBtn);
+        profileLoading = getActivity().findViewById(R.id.profileLoading);
+
+        // Logout Click Listener
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Calling Logout Function
+                _logginOut();
+            }
+        });
+
+    }
+
+    // Logout Method
+    public void _logginOut () {
+        mAuth.signOut();
+
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        startActivity(intent);
+
+        // ending current acitivity
+        getActivity().finish();
+    }
+
+    // Fetching user data from firebase realtime database
+    public void _getUserData () {
+
+        try {
+            // Getting User UID
+            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+            String UID = firebaseUser.getUid().toString();
+
+            // Making Database reference
+            String dbRef = "users/" + UID;
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference(dbRef);
+
+            myRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    HashMap<String, Object> hashmap = (HashMap<String, Object>) dataSnapshot.getValue();
+
+                    // Populating Profile Fields
+                    String fn = hashmap.get("firstname").toString();
+                    String ln = hashmap.get("lastname").toString();
+                    String em = hashmap.get("email").toString();
+
+                    profileFN.setText(fn);
+                    profileLN.setText(ln);
+                    profileEmail.setText(em);
+
+                    // Changing visiblilties
+                    profileLoading.setVisibility(View.GONE);
+                    profileData.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        catch (Exception e){
+            Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_SHORT).show();
+        }
+    } // getUserData is ending here
 }

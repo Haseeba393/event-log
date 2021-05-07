@@ -20,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
+        android:layout_above="@id/bottomNavigation"
         />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -31,7 +32,6 @@
         android:layout_alignParentBottom="true"
         app:itemIconTint="@color/whiteColor"
         app:itemTextColor="@color/whiteColor"
-        android:layout_above="@+id/frame_container"
         />
 
 </RelativeLayout>

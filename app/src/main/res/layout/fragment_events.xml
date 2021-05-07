@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:text="Events"
         android:textSize="32dp"
-        android:textColor="@color/backgroundColor"/>
+        android:textColor="@color/blackColor"
+        />
 
 </LinearLayout>

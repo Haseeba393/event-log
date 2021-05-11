@@ -209,7 +209,7 @@ public class AddEvent extends Fragment {
                 DatabaseReference myRef = database.getReference("events");
 
                 // creating date string format .e.g. 05-06-1996
-                String date = String.valueOf(eventDate.getDayOfMonth()) + "-" + String.valueOf(eventDate.getDayOfMonth()) + "-" + String.valueOf(eventDate.getDayOfMonth());
+                String date = String.valueOf(eventDate.getDayOfMonth()) + "-" + String.valueOf(eventDate.getMonth()+1) + "-" + String.valueOf(eventDate.getYear());
 
                 // Creating Key Value pair for realtime database using hashmap
                 HashMap<String , Object> databaseMap = new HashMap<>();

@@ -6,83 +6,138 @@
     android:layout_height="match_parent"
     tools:context=".fragments.AddEvent">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/eventCover"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:src="@drawable/upload"
-            android:background="@color/greyColor"
-            />
-
-        <Button
-            android:id="@+id/uploadImgBtn"
-            android:layout_width="match_parent"
+        <ProgressBar
+            android:id="@+id/addEventLoading"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/uploadBtn"
-            android:background="@color/backgroundColor"
-            android:textColor="@color/whiteColor"
-            android:textSize="16dp"
-            android:layout_marginTop="20dp"
-            />
-
-        <Button
-            android:id="@+id/removeImgBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/removeBtn"
-            android:background="@color/redColor"
-            android:textColor="@color/whiteColor"
-            android:textSize="16dp"
-            android:layout_marginTop="10dp"
+            android:layout_centerInParent="true"
             android:visibility="gone"
             />
 
-        <EditText
-            android:id="@+id/eventTitle"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:hint="Event Title"
-            android:textColor="@color/blackColor"
-            android:textSize="18dp"
-            android:inputType="text"
-            />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-        <EditText
-            android:id="@+id/eventDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:hint="Event Description"
-            android:textColor="@color/blackColor"
-            android:textSize="18dp"
-            android:inputType="textMultiLine"
-            android:lines="5"
-            />
+            <ImageView
+                android:id="@+id/eventCover"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@color/greyColor"
+                />
 
-        <DatePicker
-            android:id="@+id/eventDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            <Button
+                android:id="@+id/uploadImgBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/uploadBtn"
+                android:background="@color/backgroundColor"
+                android:textColor="@color/whiteColor"
+                android:textSize="16dp"
+                android:layout_marginTop="20dp"
+                />
 
-        <Button
-            android:id="@+id/addEventBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/addEvent"
-            android:background="@color/backgroundColor"
-            android:textColor="@color/whiteColor"
-            android:textSize="16dp"
-            android:layout_marginTop="20dp"
-            />
+            <Button
+                android:id="@+id/removeImgBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/removeBtn"
+                android:background="@color/redColor"
+                android:textColor="@color/whiteColor"
+                android:textSize="16dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                />
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/eventTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Event Title"
+                android:textColor="@color/blackColor"
+                android:textSize="18dp"
+                android:inputType="text"
+                />
+
+            <EditText
+                android:id="@+id/eventDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Event Description"
+                android:textColor="@color/blackColor"
+                android:textSize="18dp"
+                android:inputType="textMultiLine"
+                android:lines="5"
+                />
+
+            <EditText
+                android:id="@+id/eventLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Event Location"
+                android:textColor="@color/blackColor"
+                android:textSize="18dp"
+                android:inputType="text"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/personName"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Contact Person"
+                    android:textColor="@color/blackColor"
+                    android:textSize="18dp"
+                    android:inputType="text"
+                    />
+
+                <EditText
+                    android:id="@+id/personNumber"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Contact Number"
+                    android:textColor="@color/blackColor"
+                    android:textSize="18dp"
+                    android:inputType="number"
+                    />
+
+            </LinearLayout>
+
+            <DatePicker
+                android:id="@+id/eventDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+            <Button
+                android:id="@+id/addEventBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/addEvent"
+                android:background="@color/backgroundColor"
+                android:textColor="@color/whiteColor"
+                android:textSize="16dp"
+                android:layout_marginTop="20dp"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
 
 </ScrollView>

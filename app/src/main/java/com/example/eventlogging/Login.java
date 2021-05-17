@@ -2,6 +2,7 @@ package com.example.eventlogging;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,6 +27,7 @@ public class Login extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     //Declaring variables
+    public Toolbar loginToolbar;
     public EditText emailEditText;
     public EditText passwordEditText;
     public Button loginScreenBtn;
@@ -41,11 +43,25 @@ public class Login extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         //Initializing Variables
+        loginToolbar = findViewById(R.id.loginToolbar);
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEdittext);
         loginScreenBtn = findViewById(R.id.loginScreenBtn);
         forgetPassword = findViewById(R.id.forgetPassword);
         loginLoading = findViewById(R.id.loginLoading);
+
+        //setSupportActionBar(loginToolbar);
+        loginToolbar.setTitle("");
+
+        loginToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),Welcome.class);
+                startActivity(intent);
+
+                finish();
+            }
+        });
 
         //Forget Password TextView Listener
         forgetPassword.setOnClickListener(new View.OnClickListener() {
@@ -86,21 +102,22 @@ public class Login extends AppCompatActivity {
 
             //Implementing conditions
             if ( emailText.length() == 0 ){
-                Toast.makeText(getApplicationContext(),"Email is empty",Toast.LENGTH_SHORT).show();
+                emailEditText.setError("Email is empty");
             }
             else if( !emailText.contains("@") ){
-                Toast.makeText(getApplicationContext(),"Email is not valid",Toast.LENGTH_SHORT).show();
+                emailEditText.setError("Email is not valid");
             }
             else if( !emailText.contains(".") ){
-                Toast.makeText(getApplicationContext(),"Email is not valid",Toast.LENGTH_SHORT).show();
+                emailEditText.setError("Email is not valid");
             }
             else if ( passwordText.length() == 0 ) {
-                Toast.makeText(getApplicationContext(), "Password is empty", Toast.LENGTH_SHORT).show();
+                passwordEditText.setError("Password is empty");
             }
             else if( passwordText.length() < 6){
-                Toast.makeText(getApplicationContext(), "Password should contain at least 6 characters", Toast.LENGTH_SHORT).show();
+                passwordEditText.setError("Password should contain at least 6 characters");
             }
             else{
+
                 // Set progress visibility to visible
                 loginLoading.setVisibility(View.VISIBLE);
 

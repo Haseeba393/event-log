@@ -181,6 +181,7 @@ public class AddEvent extends Fragment {
                 Toast.makeText(getActivity(), "Event Cover is required", Toast.LENGTH_LONG).show();
             }
             else if(eventTitle.getText().toString().length() == 0){
+                eventTitle.setError("Event Title is requried");
                 Toast.makeText(getActivity(), "Event Title is required", Toast.LENGTH_LONG).show();
             }
             else if(eventDescription.getText().toString().length() == 0){

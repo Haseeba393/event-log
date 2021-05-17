@@ -2,6 +2,7 @@ package com.example.eventlogging;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ public class Signup extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
+    private Toolbar signupToolbar;
     public EditText signupFirstName;
     public EditText signupLastName;
     public EditText signupEmail;
@@ -47,13 +49,23 @@ public class Signup extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
+        signupToolbar = findViewById(R.id.signupToolbar);
         signupFirstName = findViewById(R.id.signupFirstName);
         signupLastName = findViewById(R.id.signupLastName);
         signupEmail = findViewById(R.id.signupEmail);
         signupPassword = findViewById(R.id.signupPassword);
         signupScreenBtn = findViewById(R.id.signupScreenBtn);
-
         signupLoading = findViewById(R.id.signupLoading);
+
+        signupToolbar.setTitle("");
+        signupToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),Welcome.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         //Signup Button Click Listener
         signupScreenBtn.setOnClickListener(new View.OnClickListener() {
@@ -78,27 +90,32 @@ public class Signup extends AppCompatActivity {
 
             //Implementing conditions
             if( firstName.length() == 0 ){
-                Toast.makeText(getApplicationContext(),"First Name is empty",Toast.LENGTH_SHORT).show();
+                signupFirstName.setError("First Name is empty");
             }
             else if( lastName.length() == 0 ){
-                Toast.makeText(getApplicationContext(),"Last Name is empty",Toast.LENGTH_SHORT).show();
+                signupLastName.setError("Last Name is empty");
             }
             else if ( email.length() == 0 ){
-                Toast.makeText(getApplicationContext(),"Email is empty",Toast.LENGTH_SHORT).show();
+                signupEmail.setError("Email is empty");
             }
             else if( !email.contains("@") ){
-                Toast.makeText(getApplicationContext(),"Email is not valid",Toast.LENGTH_SHORT).show();
+                signupEmail.setError("Email is not valid");
             }
             else if( !email.contains(".") ){
-                Toast.makeText(getApplicationContext(),"Email is not valid",Toast.LENGTH_SHORT).show();
+                signupEmail.setError("Email is not valid");
             }
             else if ( password.length() == 0 ) {
-                Toast.makeText(getApplicationContext(), "Password is empty", Toast.LENGTH_SHORT).show();
+                signupPassword.setError("Password is empty");
             }
             else if( password.length() < 6){
-                Toast.makeText(getApplicationContext(), "Password should contain at least 6 characters", Toast.LENGTH_SHORT).show();
+                signupPassword.setError("Password should contain at least 6 characters");
             }
             else{
+
+                signupFirstName.setError("");
+                signupLastName.setError("");
+                signupEmail.setError("");
+                signupPassword.setError("");
 
                 // Show progress bar
                 signupLoading.setVisibility(View.VISIBLE);

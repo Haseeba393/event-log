@@ -2,6 +2,7 @@ package com.example.eventlogging;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class ForgetPassword extends AppCompatActivity {
     // declaring firbease auth variable
     private FirebaseAuth mAuth;
 
+    private Toolbar resetPasswordToolbar;
     public EditText forgetPasswordEmail;
     public Button forgetPasswordBtn;
     public ProgressBar forgetPasswordLoading;
@@ -35,6 +37,7 @@ public class ForgetPassword extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
+        resetPasswordToolbar = findViewById(R.id.resetPasswordToolbar);
         forgetPasswordEmail = findViewById(R.id.forgetPasswordEmail);
         forgetPasswordBtn = findViewById(R.id.forgetPasswordBtn);
         forgetPasswordLoading = findViewById(R.id.forgetPasswordLoading);
@@ -46,6 +49,16 @@ public class ForgetPassword extends AppCompatActivity {
             }
         });
 
+
+        resetPasswordToolbar.setTitle("");
+        resetPasswordToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),Login.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     //When User will click on Send Link
@@ -56,13 +69,13 @@ public class ForgetPassword extends AppCompatActivity {
 
         //Implementing conditions
         if ( emailText.length() == 0 ){
-            Toast.makeText(getApplicationContext(),"Email is empty",Toast.LENGTH_SHORT).show();
+            forgetPasswordEmail.setError("Email is empty");
         }
         else if( !emailText.contains("@") ){
-            Toast.makeText(getApplicationContext(),"Email is not valid",Toast.LENGTH_SHORT).show();
+            forgetPasswordEmail.setError("Email is not valid");
         }
         else if( !emailText.contains(".") ){
-            Toast.makeText(getApplicationContext(),"Email is not valid",Toast.LENGTH_SHORT).show();
+            forgetPasswordEmail.setError("Email is not valid");
         }
         else{
 

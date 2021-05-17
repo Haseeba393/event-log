@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="spacing_20">20dp</dimen>
+    <dimen name="spacing_15">15dp</dimen>
+    <dimen name="spacing_10">10dp</dimen>
+    <dimen name="spacing_5">5dp</dimen>
+
+    <dimen name="buttonFontSize">16sp</dimen>
+
+    <dimen name="heading_36">36sp</dimen>
+    <dimen name="heading_32">32sp</dimen>
+    <dimen name="heading_28">28sp</dimen>
+    <dimen name="heading_24">24sp</dimen>
+    <dimen name="heading_20">20sp</dimen>
+    <dimen name="info_16">16sp</dimen>
+    <dimen name="info_14">14sp</dimen>
+    <dimen name="info_12">12sp</dimen>
+
+    <dimen name="radius_15">15dp</dimen>
+    <dimen name="radius_10">10dp</dimen>
+</resources>

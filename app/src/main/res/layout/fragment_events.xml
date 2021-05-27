@@ -8,11 +8,20 @@
     android:gravity="center">
 
     <TextView
+        android:id="@+id/eventCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Events"
         android:textSize="32dp"
         android:textColor="@color/blackColor"
+        android:visibility="gone"
+        />
+
+    <ProgressBar
+        android:id="@+id/eventsLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
         />
 
 </LinearLayout>

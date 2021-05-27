@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.HashMap;
+
 public class Welcome extends AppCompatActivity {
 
     private Button loginButton;
@@ -27,7 +29,6 @@ public class Welcome extends AppCompatActivity {
                 _gotoLoginScreen();
             }
         });
-
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override

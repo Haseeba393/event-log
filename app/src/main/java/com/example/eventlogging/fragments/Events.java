@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +26,9 @@ public class Events extends Fragment {
 
     private TextView eventCount;
     private ProgressBar eventsLoading;
+    private ListView eventsListView;
+
+    private String dummyEvents [] = {"Event 1", "Event 2", "Event 3"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,10 +43,9 @@ public class Events extends Fragment {
 
         eventCount = getActivity().findViewById(R.id.eventCount);
         eventsLoading = getActivity().findViewById(R.id.eventsLoading);
+        eventsListView = getActivity().findViewById(R.id.eventListView);
 
         _getEvents();
-
-
 
     }
 
@@ -58,9 +62,18 @@ public class Events extends Fragment {
 
                     int EVENTS = (int) dataSnapshot.getChildrenCount();
 
-                    eventsLoading.setVisibility(View.GONE);
-                    eventCount.setText(String.valueOf(EVENTS));
-                    eventCount.setVisibility(View.VISIBLE);
+                    try {
+                        ArrayAdapter<String> eventsAdapter = new ArrayAdapter<String>(getActivity(), R.layout.event_row, dummyEvents);
+                        eventsListView.setAdapter(eventsAdapter);
+
+                        eventsLoading.setVisibility(View.GONE);
+                        eventCount.setText("Events: " + String.valueOf(EVENTS));
+                        eventCount.setVisibility(View.VISIBLE);
+                        eventsListView.setVisibility(View.VISIBLE);
+                    }
+                    catch (Exception e){
+                        Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_LONG).show();
+                    }
 
                 }
 

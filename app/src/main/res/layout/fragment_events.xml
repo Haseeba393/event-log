@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.Events"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:padding="@dimen/spacing_10">
 
     <TextView
         android:id="@+id/eventCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Events"
-        android:textSize="32dp"
+        android:text="Events: 2"
+        android:textSize="@dimen/info_16"
         android:textColor="@color/blackColor"
+        android:visibility="gone"
+        />
+
+    <ListView
+        android:id="@+id/eventListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/eventCount"
+        android:layout_marginTop="@dimen/spacing_10"
         android:visibility="gone"
         />
 
@@ -22,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
+        android:layout_centerInParent="true"
         />
 
-</LinearLayout>
+</RelativeLayout>

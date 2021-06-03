@@ -15,12 +15,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.eventlogging.EventAdapter;
+import com.example.eventlogging.EventModel;
 import com.example.eventlogging.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class Events extends Fragment {
 
@@ -46,7 +50,6 @@ public class Events extends Fragment {
         eventsListView = getActivity().findViewById(R.id.eventListView);
 
         _getEvents();
-
     }
 
     // function to get events
@@ -63,8 +66,20 @@ public class Events extends Fragment {
                     int EVENTS = (int) dataSnapshot.getChildrenCount();
 
                     try {
-                        ArrayAdapter<String> eventsAdapter = new ArrayAdapter<String>(getActivity(), R.layout.event_row, dummyEvents);
-                        eventsListView.setAdapter(eventsAdapter);
+
+                        EventModel event1 = new EventModel("20-5-2021","description", "FSD", "EventTitle");
+                        EventModel event2 = new EventModel("22-10-2022","description 2", "LHR", "Event title 2");
+
+                        //EventModel [] events = {event1, event2};
+
+                        ArrayList<EventModel> events = new ArrayList<EventModel>();
+                        events.add(event1);
+                        events.add(event2);
+
+                        EventAdapter eventAdapter = new EventAdapter(getActivity(), events);
+
+                        eventsListView.setAdapter(eventAdapter);
+
 
                         eventsLoading.setVisibility(View.GONE);
                         eventCount.setText("Events: " + String.valueOf(EVENTS));

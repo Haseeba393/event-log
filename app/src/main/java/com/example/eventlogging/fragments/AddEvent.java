@@ -2,12 +2,13 @@ package com.example.eventlogging.fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.eventlogging.Home;
@@ -32,7 +34,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 public class AddEvent extends Fragment {
@@ -49,10 +57,14 @@ public class AddEvent extends Fragment {
     private TextView eventLocation;
     private TextView personName;
     private TextView personNumber;
-    private DatePicker eventDate;
     private Button addEventBtn;
+    private Button selectDate;
+    private Button selectTime;
 
     private ProgressBar addEventLoading;
+    private int mYear, mMonth, mDay, mHour, mMinute;
+
+    FirebaseStorage storage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +79,8 @@ public class AddEvent extends Fragment {
 
         // initializing firebase authentication
         mAuth = FirebaseAuth.getInstance();
+        // Initializing firebase Storage
+        storage = FirebaseStorage.getInstance();
 
         eventCover = getActivity().findViewById(R.id.eventCover);
         uploadImgBtn = getActivity().findViewById(R.id.uploadImgBtn);
@@ -76,12 +90,11 @@ public class AddEvent extends Fragment {
         eventLocation = getActivity().findViewById(R.id.eventLocation);
         personName = getActivity().findViewById(R.id.personName);
         personNumber = getActivity().findViewById(R.id.personNumber);
-        eventDate = getActivity().findViewById(R.id.eventDate);
         addEventBtn = getActivity().findViewById(R.id.addEventBtn);
         addEventLoading = getActivity().findViewById(R.id.addEventLoading);
 
-        // Setting Minimum Date
-        eventDate.setMinDate(System.currentTimeMillis() - 1000);
+        selectTime=getActivity().findViewById(R.id.selectTime);
+        selectDate=getActivity().findViewById(R.id.selectDate);
 
         // Calling Add new event function on clicking Add EventButton
         addEventBtn.setOnClickListener(new View.OnClickListener()
@@ -103,6 +116,26 @@ public class AddEvent extends Fragment {
             }
         });
 
+        // Select Date onClick Listener
+        selectDate.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                _selectDate();
+            }
+        });
+
+        // Select Time onClick Listener
+        selectTime.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                _selectTime();
+            }
+        });
+
         // Remove Image from ImageView
         removeImgBtn.setOnClickListener(new View.OnClickListener()
         {
@@ -118,6 +151,49 @@ public class AddEvent extends Fragment {
         });
 
 
+    }
+
+    // Function for selecting Date
+    public void _selectDate () {
+
+        // Get Current Date
+        final Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        selectDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
+    }
+
+    // Function for selecting Time
+    public void _selectTime () {
+        // Get Current Time
+        final Calendar c = Calendar.getInstance();
+        mHour = c.get(Calendar.HOUR_OF_DAY);
+        mMinute = c.get(Calendar.MINUTE);
+
+        // Launch Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+
+                        selectTime.setText(hourOfDay + ":" + minute);
+                    }
+                }, mHour, mMinute, false);
+        timePickerDialog.show();
     }
 
     @Override
@@ -196,6 +272,12 @@ public class AddEvent extends Fragment {
             else if(personNumber.getText().toString().length() == 0){
                 Toast.makeText(getActivity(), "Person Number is required", Toast.LENGTH_LONG).show();
             }
+            else if(selectDate.getText().toString().equals("Select Date")){
+                Toast.makeText(getActivity(), "Event Date is required", Toast.LENGTH_LONG).show();
+            }
+            else if(selectTime.getText().toString().equals("Select Time")){
+                Toast.makeText(getActivity(), "Event Time is required", Toast.LENGTH_LONG).show();
+            }
             else {
 
                 // Show Loading
@@ -203,52 +285,99 @@ public class AddEvent extends Fragment {
 
                 // Creating Database reference to add event details
                 FirebaseUser currentUser = mAuth.getCurrentUser();
-                String uid = currentUser.getUid();
+                final String uid = currentUser.getUid();
 
-                // Wrinting extra information of user in database
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("events");
+                // Create a storage reference from our app
+                String storeRef = uid + "/events";
+                final StorageReference eventCoverRef = storage.getReference(storeRef);
 
-                // creating date string format .e.g. 05-06-1996
-                String date = String.valueOf(eventDate.getDayOfMonth()) + "-" + String.valueOf(eventDate.getMonth()+1) + "-" + String.valueOf(eventDate.getYear());
+                // Uploading Event Cover to Storage
+                eventCover.setDrawingCacheEnabled(true);
+                eventCover.buildDrawingCache();
+                Bitmap bitmap = ((BitmapDrawable) eventCover.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] data = baos.toByteArray();
 
-                // Creating Key Value pair for realtime database using hashmap
-                HashMap<String , Object> databaseMap = new HashMap<>();
-                databaseMap.put("event_title",eventTitle.getText().toString());
-                databaseMap.put("event_description",eventDescription.getText().toString());
-                databaseMap.put("event_location",eventLocation.getText().toString());
-                databaseMap.put("event_date",date);
-                databaseMap.put("userUID",uid);
-                databaseMap.put("event_cover","");
-
-                String pushKey = myRef.push().getKey();
-
-                myRef.child(pushKey).setValue(databaseMap)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                // Starting Uploading of file
+                UploadTask uploadTask = eventCoverRef.putBytes(data);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-
-                        // Clear the fields
-                        eventCover.setImageDrawable(null);
-                        eventTitle.setText("");
-                        eventDescription.setText("");
-                        eventLocation.setText("");
-                        personName.setText("");
-                        personNumber.setText("");
-
-
-                        Toast.makeText(getActivity(),"Event is added successfully",Toast.LENGTH_LONG).show();
-                        addEventLoading.setVisibility(View.GONE);
-
+                    public void onFailure(@NonNull Exception exception) {
+                        Toast.makeText(getActivity(), exception.getMessage().toString(), Toast.LENGTH_LONG).show();
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_LONG).show();
-                        addEventLoading.setVisibility(View.GONE);
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        // after completing file uploading now get its URL
+                        eventCoverRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                // Got the download URL for 'users/me/profile.png'
+
+                                // Now put image URI to event data and upload event data to realtime database
+                                // Wrinting extra information of user in database
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                DatabaseReference myRef = database.getReference("events");
+
+
+                                String date = selectDate.getText().toString() + " (" + selectTime.getText().toString() + ")";
+
+                                // Creating Key Value pair for realtime database using hashmap
+                                HashMap<String , Object> databaseMap = new HashMap<>();
+                                databaseMap.put("event_title",eventTitle.getText().toString());
+                                databaseMap.put("event_description",eventDescription.getText().toString());
+                                databaseMap.put("event_location",eventLocation.getText().toString());
+                                databaseMap.put("event_date",date);
+                                databaseMap.put("userUID",uid);
+                                databaseMap.put("event_cover",uri.toString());
+
+                                String pushKey = myRef.push().getKey();
+
+                                myRef.child(pushKey).setValue(databaseMap)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+                                        // Clear the fields
+                                        eventCover.setImageDrawable(null);
+                                        eventTitle.setText("");
+                                        eventDescription.setText("");
+                                        eventLocation.setText("");
+                                        personName.setText("");
+                                        personNumber.setText("");
+                                        selectDate.setText("Select Date");
+                                        selectTime.setText("Select Time");
+
+
+                                        Toast.makeText(getActivity(),"Event is added successfully",Toast.LENGTH_LONG).show();
+                                        addEventLoading.setVisibility(View.GONE);
+                                        removeImgBtn.setVisibility(View.GONE);
+                                        uploadImgBtn.setText(R.string.uploadBtn);
+
+
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_LONG).show();
+                                        addEventLoading.setVisibility(View.GONE);
+                                    }
+                                });
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                Toast.makeText(getActivity(), exception.getMessage().toString(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+
                     }
                 });
+
             }
         }
         catch (Exception e){

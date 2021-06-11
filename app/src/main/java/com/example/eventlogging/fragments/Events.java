@@ -25,14 +25,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Events extends Fragment {
 
     private TextView eventCount;
     private ProgressBar eventsLoading;
     private ListView eventsListView;
-
-    private String dummyEvents [] = {"Event 1", "Event 2", "Event 3"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,23 +62,40 @@ public class Events extends Fragment {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    int EVENTS = (int) dataSnapshot.getChildrenCount();
-
                     try {
 
-                        EventModel event1 = new EventModel("20-5-2021","description", "FSD", "EventTitle");
-                        EventModel event2 = new EventModel("22-10-2022","description 2", "LHR", "Event title 2");
+                        int EVENTS = (int) dataSnapshot.getChildrenCount();
 
-                        //EventModel [] events = {event1, event2};
+                        // for loop to get all events
+                        // then initilize eventModel object with each event values
+                        // then add event model object to Array List
+                        // Last Pass that Array list to our customer adapter
 
                         ArrayList<EventModel> events = new ArrayList<EventModel>();
-                        events.add(event1);
-                        events.add(event2);
+
+                        for (DataSnapshot eventSnapshot: dataSnapshot.getChildren()) {
+                            // TODO: handle the Event
+
+                            // Getting Children data and saving in hashmap
+                            HashMap<String, Object> hashmap = (HashMap<String, Object>) eventSnapshot.getValue();
+
+                            // Getting Values for each property from hashmap and saving in String variables
+                            String event_cover = hashmap.get("event_cover").toString();
+                            String event_title = hashmap.get("event_title").toString();
+                            String event_description = hashmap.get("event_description").toString();
+                            String event_location = hashmap.get("event_location").toString();
+                            String event_date = hashmap.get("event_date").toString();
+                            String owner_id = hashmap.get("userUID").toString();
+
+                            // Making EventModel Object and passing event values to it
+                            EventModel event = new EventModel(event_cover, event_date, event_description, event_location, event_title, owner_id);
+
+                            events.add(event);
+
+                        } // For loop ends here
 
                         EventAdapter eventAdapter = new EventAdapter(getActivity(), events);
-
                         eventsListView.setAdapter(eventAdapter);
-
 
                         eventsLoading.setVisibility(View.GONE);
                         eventCount.setText("Events: " + String.valueOf(EVENTS));

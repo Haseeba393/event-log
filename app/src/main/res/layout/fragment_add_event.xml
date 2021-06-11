@@ -29,6 +29,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:background="@color/greyColor"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
                 />
 
             <Button
@@ -117,10 +119,26 @@
 
             </LinearLayout>
 
-            <DatePicker
-                android:id="@+id/eventDate"
+            <Button
+                android:id="@+id/selectDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Select Date"
+                android:background="@drawable/secondary_button_background"
+                android:textColor="@color/whiteColor"
+                android:textSize="16dp"
+                android:layout_marginTop="@dimen/spacing_10"
+                />
+
+            <Button
+                android:id="@+id/selectTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Time"
+                android:background="@drawable/secondary_button_background"
+                android:textColor="@color/whiteColor"
+                android:textSize="16dp"
+                android:layout_marginTop="@dimen/spacing_10"
                 />
 
             <Button
@@ -128,7 +146,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/addEvent"
-                android:background="@color/backgroundColor"
+                android:background="@drawable/button_background"
                 android:textColor="@color/whiteColor"
                 android:textSize="16dp"
                 android:layout_marginTop="20dp"

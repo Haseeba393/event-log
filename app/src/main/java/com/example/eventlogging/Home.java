@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.example.eventlogging.fragments.AddEvent;
 import com.example.eventlogging.fragments.Events;
+import com.example.eventlogging.fragments.MyEvents;
 import com.example.eventlogging.fragments.Profile;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -46,8 +47,14 @@ public class Home extends AppCompatActivity {
                         toolbar.setTitle("Add Event");
                         fragment = new AddEvent();
                         loadFragment(fragment);
-
                         return true;
+
+                    case R.id.navigation_myevents:
+                        toolbar.setTitle("My Events");
+                        fragment = new MyEvents();
+                        loadFragment(fragment);
+                        return true;
+
                     case R.id.navigation_profile:
                         toolbar.setTitle("Profile");
                         fragment = new Profile();

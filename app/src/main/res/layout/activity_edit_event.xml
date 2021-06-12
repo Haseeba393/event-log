@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditEvent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/edit_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundColor"
+            app:title="@string/editEventHeader"
+            app:titleTextColor="@color/whiteColor"
+            app:navigationIcon="@drawable/leftwhitearrow"
+            />
+
+        <ProgressBar
+            android:id="@+id/edit_EventLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/edit_toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <ImageView
+                    android:id="@+id/edit_eventCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/greyColor"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    />
+
+                <Button
+                    android:id="@+id/edit_uploadImgBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/uploadBtn"
+                    android:background="@color/backgroundColor"
+                    android:textColor="@color/whiteColor"
+                    android:textSize="16dp"
+                    android:layout_marginTop="20dp"
+                    />
+
+                <Button
+                    android:id="@+id/edit_removeImgBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/removeBtn"
+                    android:background="@color/redColor"
+                    android:textColor="@color/whiteColor"
+                    android:textSize="16dp"
+                    android:layout_marginTop="10dp"
+                    android:visibility="visible"
+                    />
+
+                <EditText
+                    android:id="@+id/edit_eventTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Event Title"
+                    android:textColor="@color/blackColor"
+                    android:textSize="18dp"
+                    android:inputType="text"
+                    />
+
+                <EditText
+                    android:id="@+id/edit_eventDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Event Description"
+                    android:textColor="@color/blackColor"
+                    android:textSize="18dp"
+                    android:inputType="textMultiLine"
+                    android:lines="5"
+                    />
+
+                <EditText
+                    android:id="@+id/edit_eventLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Event Location"
+                    android:textColor="@color/blackColor"
+                    android:textSize="18dp"
+                    android:inputType="text"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/edit_personName"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="Contact Person"
+                        android:textColor="@color/blackColor"
+                        android:textSize="18dp"
+                        android:inputType="text"
+                        />
+
+                    <EditText
+                        android:id="@+id/edit_personNumber"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="Contact Number"
+                        android:textColor="@color/blackColor"
+                        android:textSize="18dp"
+                        android:inputType="number"
+                        />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/edit_selectDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Select Date"
+                    android:background="@drawable/secondary_button_background"
+                    android:textColor="@color/whiteColor"
+                    android:textSize="16dp"
+                    android:layout_marginTop="@dimen/spacing_10"
+                    />
+
+                <Button
+                    android:id="@+id/edit_selectTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Select Time"
+                    android:background="@drawable/secondary_button_background"
+                    android:textColor="@color/whiteColor"
+                    android:textSize="16dp"
+                    android:layout_marginTop="@dimen/spacing_10"
+                    />
+
+                <Button
+                    android:id="@+id/edit_EventBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/editEventHeader"
+                    android:background="@drawable/button_background"
+                    android:textColor="@color/whiteColor"
+                    android:textSize="16dp"
+                    android:layout_marginTop="20dp"
+                    />
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+
+    </RelativeLayout>
+
+
+
+
+
+
+</RelativeLayout>

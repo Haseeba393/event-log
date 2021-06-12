@@ -16,7 +16,10 @@
 
     <string name="tab_events">Events</string>
     <string name="tab_addevent">Add</string>
+    <string name="tab_myevents">My Events</string>
     <string name="tab_profile">Profile</string>
+
+    <string name="editEventHeader">Edit Event</string>
 
     <string name="uploadBtn">Upload Image</string>
     <string name="changeBtn">Change Image</string>
@@ -25,4 +28,6 @@
     <string name="addEvent">Add Event</string>
 
     <string name="fontFamily">sans-serif-light</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

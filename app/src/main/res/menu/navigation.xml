@@ -12,6 +12,11 @@
         android:title="@string/tab_addevent" />
 
     <item
+        android:id="@+id/navigation_myevents"
+        android:icon="@drawable/list_512"
+        android:title="@string/tab_myevents" />
+
+    <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/profile_512"
         android:title="@string/tab_profile" />

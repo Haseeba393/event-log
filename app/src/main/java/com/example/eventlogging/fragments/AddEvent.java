@@ -322,14 +322,16 @@ public class AddEvent extends Fragment {
                                 DatabaseReference myRef = database.getReference("events");
 
 
-                                String date = selectDate.getText().toString() + " (" + selectTime.getText().toString() + ")";
+                                String date = selectDate.getText().toString() + " " + selectTime.getText().toString();
 
                                 // Creating Key Value pair for realtime database using hashmap
                                 HashMap<String , Object> databaseMap = new HashMap<>();
-                                databaseMap.put("event_title",eventTitle.getText().toString());
-                                databaseMap.put("event_description",eventDescription.getText().toString());
-                                databaseMap.put("event_location",eventLocation.getText().toString());
+                                databaseMap.put("event_title",eventTitle.getText().toString().trim());
+                                databaseMap.put("event_description",eventDescription.getText().toString().trim());
+                                databaseMap.put("event_location",eventLocation.getText().toString().trim());
                                 databaseMap.put("event_date",date);
+                                databaseMap.put("event_person",personName.getText().toString().trim());
+                                databaseMap.put("event_number",personNumber.getText().toString().trim());
                                 databaseMap.put("userUID",uid);
                                 databaseMap.put("event_cover",uri.toString());
 
